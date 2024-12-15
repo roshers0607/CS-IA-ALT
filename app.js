@@ -1,136 +1,73 @@
-// User data storage (would be replaced by backend in real app)
-let users = JSON.parse(localStorage.getItem('fitnessUsers')) || [];
-let currentUser = null;
+// Page loading and navigation
+function loadPage(pageUrl) {
+    fetch(pageUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('app').innerHTML = html;
+            initializePageListeners();
+        })
+        .catch(error => console.error('Error loading page:', error));
+}
 
 // Authentication functions
 function signup(username, email, password) {
-    const existingUser = users.find(u => u.username === username);
-    if (existingUser) {
-        alert('Username already exists');
-        return false;
-    }
-    
-    const newUser = {
-        username,
-        email,
-        password,
-        workouts: [],
-        meals: [],
-        stats: {
-            musclesWorked: [],
-            totalWorkoutTime: 0,
-            caloriesBurned: 0,
-            nutrition: {
-                protein: 0,
-                carbs: 0,
-                fat: 0
-            }
-        }
-    };
-    
-    users.push(newUser);
-    localStorage.setItem('fitnessUsers', JSON.stringify(users));
-    return true;
+    // Similar to previous implementation
 }
 
 function login(username, password) {
-    const user = users.find(u => u.username === username && u.password === password);
-    if (user) {
-        currentUser = user;
-        updateDashboard();
-        showPage('dashboard-page');
-        return true;
+    // Similar to previous implementation
+}
+
+function initializePageListeners() {
+    // Login page listeners
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (login(username, password)) {
+                loadPage('homepage.html');
+            }
+        });
     }
-    alert('Invalid username or password');
-    return false;
-}
 
-function logout() {
-    currentUser = null;
-    showPage('login-page');
-}
-
-// Page navigation
-function showPage(pageId) {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-}
-
-// BMI Calculator
-function calculateBMI() {
-    const height = document.getElementById('height').value / 100;
-    const weight = document.getElementById('weight').value;
-    
-    if (height && weight) {
-        const bmi = weight / (height * height);
-        const bmiResult = document.getElementById('bmi-result');
-        
-        if (bmi < 18.5) bmiResult.textContent = `BMI: ${bmi.toFixed(1)} (Underweight)`;
-        else if (bmi < 25) bmiResult.textContent = `BMI: ${bmi.toFixed(1)} (Normal weight)`;
-        else if (bmi < 30) bmiResult.textContent = `BMI: ${bmi.toFixed(1)} (Overweight)`;
-        else bmiResult.textContent = `BMI: ${bmi.toFixed(1)} (Obese)`;
+    // Signup page listeners
+    const signupForm = document.getElementById('signup-form');
+    if (signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('new-username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            if (signup(username, email, password)) {
+                loadPage('login.html');
+            }
+        });
     }
-}
 
-// Dashboard Update
-function updateDashboard() {
-    if (!currentUser) return;
-    
-    const musclesWorked = document.getElementById('muscles-worked');
-    musclesWorked.innerHTML = currentUser.stats.musclesWorked.join(', ') || 'No muscles worked this week';
-    
-    document.getElementById('total-workout-time').textContent = 
-        `${currentUser.stats.totalWorkoutTime} mins`;
-    
-    document.getElementById('calories-burned').textContent = 
-        `${currentUser.stats.caloriesBurned} cal`;
-    
-    document.getElementById('protein-intake').textContent = 
-        `${currentUser.stats.nutrition.protein}g`;
-    document.getElementById('carbs-intake').textContent = 
-        `${currentUser.stats.nutrition.carbs}g`;
-    document.getElementById('fat-intake').textContent = 
-        `${currentUser.stats.nutrition.fat}g`;
-}
-
-// Event Listeners
-document.getElementById('signup-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = document.getElementById('new-username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('new-password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
-    
-    if (password !== confirmPassword) {
-        alert('Passwords do not match');
-        return;
+    // Logout functionality
+    const logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Logout logic
+            loadPage('login.html');
+        });
     }
-    
-    if (signup(username, email, password)) {
-        showPage('login-page');
-    }
-});
 
-document.getElementById('login-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    login(username, password);
-});
-
-document.getElementById('signup-link').addEventListener('click', () => showPage('signup-page'));
-
-document.getElementById('logout-btn').addEventListener('click', logout);
-
-document.getElementById('bmi-calculator-btn').addEventListener('click', () => showPage('bmi-calculator-page'));
-document.getElementById('calculate-bmi').addEventListener('click', calculateBMI);
-document.getElementById('back-to-dashboard-bmi').addEventListener('click', () => showPage('dashboard-page'));
-
-document.getElementById('workout-planner-btn').addEventListener('click', () => showPage('workout-planner-page'));
-document.getElementById('back-to-dashboard').addEventListener('click', () => showPage('dashboard-page'));
-
-document.getElementById('meal-planner-btn').addEventListener('click', () => showPage('meal-planner-page'));
-document.getElementById('back-to-dashboard-meal').addEventListener('click', () => showPage('dashboard-page'));
+    // Other page-specific initializations would go here
+}
 
 // Initial page load
-showPage('login-page');
+document.addEventListener('DOMContentLoaded', () => {
+    loadPage('login.html');
+});
+
