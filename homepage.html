@@ -1,0 +1,68 @@
+<header>
+    <div class="header-content">
+        <img src="/api/placeholder/50/50" alt="Profile" class="profile-pic">
+        <h1>Welcome, <span id="user-name">User</span></h1>
+        <div class="dropdown-menu">
+            <button id="menu-toggle" class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div id="dropdown-content" class="dropdown-content">
+                <a href="workout-planner.html" id="workout-link">
+                    <i class="fas fa-dumbbell"></i> Workout Planner
+                </a>
+                <a href="meal-planner.html" id="meal-link">
+                    <i class="fas fa-utensils"></i> Meal Planner
+                </a>
+                <a href="bmi-calculator.html" id="bmi-link">
+                    <i class="fas fa-calculator"></i> BMI Calculator
+                </a>
+                <a href="#" id="logout-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-container">
+    <div class="quick-stats">
+        <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <h3>Workout Time</h3>
+            <p id="total-workout-time">0 mins</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-fire"></i>
+            <h3>Calories Burned</h3>
+            <p id="calories-burned">0 cal</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-chart-pie"></i>
+            <h3>Nutrition</h3>
+            <div id="nutrition-breakdown">
+                <p>Protein: <span id="protein-intake">0g</span></p>
+                <p>Carbs: <span id="carbs-intake">0g</span></p>
+                <p>Fat: <span id="fat-intake">0g</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <h2>Weekly Progress</h2>
+        <div class="muscle-progress">
+            <h3>Muscles Worked</h3>
+            <div id="muscles-worked" class="muscle-icons">
+                <!-- Muscle icons will be dynamically added -->
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button id="start-workout-btn" class="action-btn">
+            <i class="fas fa-play"></i> Start Workout
+        </button>
+        <button id="log-meal-btn" class="action-btn">
+            <i class="fas fa-plus"></i> Log Meal
+        </button>
+    </div>
+</div>
